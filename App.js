@@ -1,35 +1,45 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState, useEffect } from "react";
-import {
-  StyleSheet,
-  View,
-  ImageBackground,
-  Text
-} from "react-native";
-
+import React, { useState } from "react";
+import { StyleSheet, View, Modal, Text, Button } from "react-native";
 
 //API DATOS https://jsonplaceholder.typicode.com/users
 // API IMAGES https://placekitten.com/
 export default function App() {
-  
+  const [modal, setModal] = useState(false);
 
-  return (  
+  return (
     <View style={styles.container}>
-        <ImageBackground
-          style={styles.photo}
-          source={{uri:'https://placekitten.com/200/200'}}
-        >
-        <Text>DASD</Text>
-        </ImageBackground>
+      <Modal animationType="slide" transparent={true} visible={modal}>
+        <View style={styles.center}>
+          <View style={styles.content}>
+            <Text>Soy Modal</Text>
+            <Button title="Cerrar Modal" onPress={()=> setModal(!modal)}></Button>
+          </View>
+        </View>
+      </Modal>
+      <Text>No soy el Modal</Text>
+      <Text>No soy el Modal</Text>
+      <Text>No soy el Modal</Text>
+      <Text>No soy el Modal</Text>
+      <Text>No soy el Modal</Text>
+      <Button title="Abrir Modal" onPress={()=> setModal(!modal)}></Button>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  
-  photo:{
-    height: 200,
-    width: 200,
+  content:{
+    backgroundColor: '#eee',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent : 'center',
+    margin: 25,
+  },
+  center:{
+    flex: 1,
+    alignItems: 'stretch',
+    justifyContent : 'center',
+    backgroundColor: 'rgba(0,0,0,0.3)',
   },
   container: {
     flex: 1,
@@ -38,6 +48,4 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingTop: 22,
   },
-  
-  
 });
