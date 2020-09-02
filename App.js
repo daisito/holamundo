@@ -1,45 +1,49 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, Alert, Dimensions } from "react-native";
-import MapView, {Marker} from 'react-native-maps';
-import * as Location from  'expo-location';
+import { StyleSheet, View, Text, Alert, Dimensions, Button } from "react-native";
+import {Camera} from  'expo-camera';
 import * as Constants from  'expo-constants';
 
 //API DATOS https://jsonplaceholder.typicode.com/users
 // API IMAGES https://placekitten.com/
 export default function App() {
-  const [locacion, setLocacion] = useState({})
-  const buscaLocation = async ()=>{
-    const {status} = await Location.requestPermissionsAsync()
-    if(status !== 'granted'){
-      return Alert.alert('No tenemos los permisos necesarios para acceder a la locacion')
-    }
-    const location = await Location.getCurrentPositionAsync({})
-    setLocacion(location)
+  
+  const [permisos, setPermisos] = useState(null)
+  const [tipo, setTipo] = useState(Camera.Constants.Type.back)
+  
+  const getPermisos  = async ()=>{
+    const {status} = await Camera.requestPermissionsAsync()
+    setPermisos(status == 'granted')
+    console.log(status);
   }
 
   useEffect(()=>{
-    buscaLocation()
+    getPermisos()
   })
+  if(permisos === null){
+    return <View><Text>Esperando permisos...</Text></View>
+  }
+  if(permisos === false){
+    return <View><Text>No tenemos accesos a la Camara...</Text></View>
+  }
   return (
     <View style={styles.container}>
-      <MapView style={styles.map}>
-        {locacion.coords
-          ? <Marker
-          coordinate={locacion.coords}
-          title="Titulo"
-          description="Descripcion del punto" />
-          :null
-        }
-      </MapView>
+        <Camera style={styles.camera}
+        type={tipo} >
+          <Button style={styles.voltear} title="Voltear" onPress={()=>{
+            const {front, back} = Camera.Constants.Type
+            const nuevoTipo = tipo === back ? front : back
+            setTipo(nuevoTipo)
+          }}></Button>
+        </Camera>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  map:{
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
+  
+  camera : {
+    flex: 1,
   },
   container: {
     flex: 1,
@@ -49,3 +53,4 @@ const styles = StyleSheet.create({
     paddingTop: 22,
   },
 });
+
