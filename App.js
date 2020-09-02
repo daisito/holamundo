@@ -3,7 +3,8 @@ import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
-  Image
+  ImageBackground,
+  Text
 } from "react-native";
 
 
@@ -14,10 +15,12 @@ export default function App() {
 
   return (  
     <View style={styles.container}>
-        <Image
+        <ImageBackground
           style={styles.photo}
           source={{uri:'https://placekitten.com/200/200'}}
-        />
+        >
+        <Text>DASD</Text>
+        </ImageBackground>
     </View>
   );
 }
